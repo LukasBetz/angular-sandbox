@@ -1,0 +1,16 @@
+<label for="numberOfYears">Anzahl Jahre</label>
+<input id="numberOfYears" type="text" [(ngModel)]="numberOfYears" (change)="refresh()"/><br/>
+<label for="beginning_balance">Startkapital</label>
+<input id="beginning_balance" type="text" [(ngModel)]="beginningBalance" (change)="refresh()"/><br/>
+<label for="monthlyDeposit">Monatliche Einzahlung</label>
+<input id="monthlyDeposit" type="text" [(ngModel)]="monthlyDeposit" (change)="refresh()"/><br/>
+<label for="expectedGrowth">Erwartetes Wachstum in Prozent</label>
+<input id="expectedGrowth" type="text" [(ngModel)]="expectedGrowth" (change)="refresh()"/><br/>
+<label for="inflation">Inflation in Prozent</label>
+<input id="inflation" type="text" [(ngModel)]="inflation" (change)="refresh()"/><br/>
+<label for="yearlyIncreaseOfDeposit">Jährliche Erhöhung der Einzahlung in Prozent</label>
+<input id="yearlyIncreaseOfDeposit" type="text" [(ngModel)]="yearlyIncreaseOfDeposit" (change)="refresh()"/><br/>
+
+<div id="chartDiv">
+    <canvas id="myChart"></canvas>
+</div>
