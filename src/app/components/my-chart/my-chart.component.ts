@@ -9,7 +9,8 @@ import {ChartConfiguration, ChartItem, registerables} from "chart.js";
 })
 export class MyChartComponent implements OnInit {
 
-    beginningBalance: number = 5000;
+    buying_value: number = 5000;
+    current_value: number = 5000;
     monthlyDeposit: number = 0;
     expectedGrowth: number = 5.00;
     inflation: number = 2.00;
@@ -24,7 +25,7 @@ export class MyChartComponent implements OnInit {
     }
 
     refresh(): void {
-        this.beginningBalance = Number(this.beginningBalance);
+        this.buying_value = Number(this.buying_value);
         this.monthlyDeposit = Number(this.monthlyDeposit);
         this.expectedGrowth = Number(this.expectedGrowth);
         this.inflation = Number(this.inflation);
@@ -109,8 +110,8 @@ export class MyChartComponent implements OnInit {
     private getBalanceAfterNYears(years: number): { balance: number, balanceAfterTax: number } {
         let depositGrowthPerYear: number = 1 + this.yearlyIncreaseOfDeposit / 100;
         let stockGrowthPerYear: number = 1 + this.expectedGrowth / 100;
-        let balanceWithoutStockGrowth: number = this.beginningBalance + this.monthlyDeposit * this.getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(depositGrowthPerYear, years);
-        let balance = this.beginningBalance * Math.pow(stockGrowthPerYear, years)
+        let balanceWithoutStockGrowth: number = this.buying_value + this.monthlyDeposit * this.getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(depositGrowthPerYear, years);
+        let balance = this.current_value * Math.pow(stockGrowthPerYear, years)
             + this.monthlyDeposit * Math.pow(stockGrowthPerYear, (12 * years - 1) / 12)
             * this.getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(depositGrowthPerYear / stockGrowthPerYear, years);
 

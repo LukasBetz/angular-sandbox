@@ -1,7 +1,9 @@
 <label for="numberOfYears">Anzahl Jahre</label>
 <input id="numberOfYears" type="text" [(ngModel)]="numberOfYears" (change)="refresh()"/><br/>
-<label for="beginning_balance">Startkapital</label>
-<input id="beginning_balance" type="text" [(ngModel)]="beginningBalance" (change)="refresh()"/><br/>
+<label for="buying_value">Kaufwert des Depots</label>
+<input id="buying_value" type="text" [(ngModel)]="buying_value" (change)="refresh()"/><br/>
+<label for="current_value">Aktueller Wert des Depots</label>
+<input id="current_value" type="text" [(ngModel)]="current_value" (change)="refresh()"/><br/>
 <label for="monthlyDeposit">Monatliche Einzahlung</label>
 <input id="monthlyDeposit" type="text" [(ngModel)]="monthlyDeposit" (change)="refresh()"/><br/>
 <label for="expectedGrowth">Erwartetes Wachstum in Prozent</label>
