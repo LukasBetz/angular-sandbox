@@ -116,7 +116,7 @@ export class MyChartComponent implements OnInit {
             * this.getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(depositGrowthPerYear / stockGrowthPerYear, years);
 
         let winnings = balance - balanceWithoutStockGrowth;
-        return {balance: balance, balanceAfterTax: balance - winnings / 4};
+        return {balance: balance, balanceAfterTax: balance - winnings * 0.18466};
     }
 
     private getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(growth: number, years: number): number {
