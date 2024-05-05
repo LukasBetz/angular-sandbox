@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Chart} from "node_modules/chart.js";
 import {ChartConfiguration, ChartItem, registerables} from "chart.js";
 
@@ -33,14 +33,16 @@ export class MyChartComponent implements OnInit {
         this.numberOfYears = Number(this.numberOfYears);
 
         let balanceWithoutInflationBeforeTax: number[] = [];
+        let balanceWithInflationBeforeTax: number[] = [];
         let balanceWithoutInflationAfterTax: number[] = [];
         let balanceWithInflationAfterTax: number[] = []
         for (let i = 0; i <= this.numberOfYears; i++) {
             let balanceForYear = this.getBalanceAfterNYears(i);
-            let balanceWithInflationAfterTaxForYear = balanceForYear.balanceAfterTax * Math.pow(1 - this.inflation / 100, i);
+            let inflationRate = Math.pow(1 - this.inflation / 100, i)
             balanceWithoutInflationBeforeTax.push(balanceForYear.balance);
+            balanceWithInflationBeforeTax.push(balanceForYear.balance * inflationRate)
             balanceWithoutInflationAfterTax.push(balanceForYear.balanceAfterTax)
-            balanceWithInflationAfterTax.push(balanceWithInflationAfterTaxForYear);
+            balanceWithInflationAfterTax.push(balanceForYear.balanceAfterTax * inflationRate);
         }
 
         // Drop old data
@@ -50,8 +52,9 @@ export class MyChartComponent implements OnInit {
         // Populate with new data
         this.chart?.data.labels?.push(...this.buildLables())
         this.chart?.data.datasets[0].data.push(...balanceWithoutInflationBeforeTax);
-        this.chart?.data.datasets[1].data.push(...balanceWithoutInflationAfterTax);
-        this.chart?.data.datasets[2].data.push(...balanceWithInflationAfterTax);
+        this.chart?.data.datasets[1].data.push(...balanceWithInflationBeforeTax);
+        this.chart?.data.datasets[2].data.push(...balanceWithoutInflationAfterTax);
+        this.chart?.data.datasets[3].data.push(...balanceWithInflationAfterTax);
         this.chart?.update();
     }
 
@@ -76,6 +79,12 @@ export class MyChartComponent implements OnInit {
                     label: 'Ohne Inflation vor Steuern',
                     backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                },
+                {
+                    label: 'Inflationsbereinigt vor Steuern',
+                    backgroundColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 255, 0)',
                     data: [],
                 },
                 {
