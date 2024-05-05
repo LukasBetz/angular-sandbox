@@ -1,18 +1,24 @@
-<label for="numberOfYears">Anzahl Jahre</label>
-<input id="numberOfYears" type="text" [(ngModel)]="numberOfYears" (change)="refresh()"/><br/>
-<label for="buying_value">Kaufwert des Depots</label>
-<input id="buying_value" type="text" [(ngModel)]="buying_value" (change)="refresh()"/><br/>
-<label for="current_value">Aktueller Wert des Depots</label>
-<input id="current_value" type="text" [(ngModel)]="current_value" (change)="refresh()"/><br/>
-<label for="monthlyDeposit">Monatliche Einzahlung</label>
-<input id="monthlyDeposit" type="text" [(ngModel)]="monthlyDeposit" (change)="refresh()"/><br/>
-<label for="expectedGrowth">Erwartetes Wachstum in Prozent</label>
-<input id="expectedGrowth" type="text" [(ngModel)]="expectedGrowth" (change)="refresh()"/><br/>
-<label for="inflation">Inflation in Prozent</label>
-<input id="inflation" type="text" [(ngModel)]="inflation" (change)="refresh()"/><br/>
-<label for="yearlyIncreaseOfDeposit">Jährliche Erhöhung der Einzahlung in Prozent</label>
-<input id="yearlyIncreaseOfDeposit" type="text" [(ngModel)]="yearlyIncreaseOfDeposit" (change)="refresh()"/><br/>
+<div class="form-group">
+    <label for="numberOfYears">Anzahl Jahre</label>
+    <input id="numberOfYears" type="text" [(ngModel)]="numberOfYears" (change)="startOfWithdrawal=numberOfYears; refresh()"/><br/>
+    <label for="buying_value">Kaufwert des Depots</label>
+    <input id="buying_value" type="text" [(ngModel)]="buyingValue" (change)="refresh()"/><br/>
+    <label for="current_value">Aktueller Wert des Depots</label>
+    <input id="current_value" type="text" [(ngModel)]="currentValue" (change)="refresh()"/><br/>
+    <label for="monthlyDeposit">Monatliche Einzahlung</label>
+    <input id="monthlyDeposit" type="text" [(ngModel)]="monthlyDeposit" (change)="refresh()"/><br/>
+    <label for="monthlyWithdrawal">Monatliche Entnahme</label>
+    <input id="monthlyWithdrawal" type="text" [(ngModel)]="monthlyWithdrawal" (change)="refresh()"/><br/>
+    <label for="startOfWithdrawal">Start monatlicher Entnahme nach</label>
+    <input id="startOfWithdrawal" type="text" [(ngModel)]="startOfWithdrawal" (change)="refresh()"/><br/>
+    <label for="expectedGrowth">Erwartetes jährliches Wachstum (%)</label>
+    <input id="expectedGrowth" type="text" [(ngModel)]="expectedGrowth" (change)="refresh()"/><br/>
+    <label for="inflation">Inflation (%)</label>
+    <input id="inflation" type="text" [(ngModel)]="inflation" (change)="refresh()"/><br/>
+    <label for="yearlyIncreaseOfChange">Erhöhung der Veränderung (%)</label>
+    <input id="yearlyIncreaseOfChange" type="text" [(ngModel)]="yearlyIncreaseOfDeposit" (change)="refresh()"/><br/>
 
-<div id="chartDiv">
-    <canvas id="myChart"></canvas>
+    <div id="chartDiv">
+        <canvas id="myChart"></canvas>
+    </div>
 </div>

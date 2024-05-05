@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Chart} from "node_modules/chart.js";
 import {ChartConfiguration, ChartItem, registerables} from "chart.js";
+import {State} from "./State.model";
 
 @Component({
     selector: 'app-my-chart',
@@ -9,12 +10,14 @@ import {ChartConfiguration, ChartItem, registerables} from "chart.js";
 })
 export class MyChartComponent implements OnInit {
 
-    buying_value: number = 5000;
-    current_value: number = 5000;
+    buyingValue: number = 5000;
+    currentValue: number = 5000;
     monthlyDeposit: number = 0;
     expectedGrowth: number = 5.00;
     inflation: number = 2.00;
     yearlyIncreaseOfDeposit: number = 0;
+    monthlyWithdrawal: number = 0;
+    startOfWithdrawal: number = 10;
 
 
     numberOfYears: number = 10;
@@ -25,24 +28,30 @@ export class MyChartComponent implements OnInit {
     }
 
     refresh(): void {
-        this.buying_value = Number(this.buying_value);
+        this.buyingValue = Number(this.buyingValue);
         this.monthlyDeposit = Number(this.monthlyDeposit);
         this.expectedGrowth = Number(this.expectedGrowth);
         this.inflation = Number(this.inflation);
         this.yearlyIncreaseOfDeposit = Number(this.yearlyIncreaseOfDeposit);
         this.numberOfYears = Number(this.numberOfYears);
 
-        let balanceWithoutInflationBeforeTax: number[] = [];
-        let balanceWithInflationBeforeTax: number[] = [];
-        let balanceWithoutInflationAfterTax: number[] = [];
-        let balanceWithInflationAfterTax: number[] = []
-        for (let i = 0; i <= this.numberOfYears; i++) {
-            let balanceForYear = this.getBalanceAfterNYears(i);
-            let inflationRate = Math.pow(1 - this.inflation / 100, i)
-            balanceWithoutInflationBeforeTax.push(balanceForYear.balance);
-            balanceWithInflationBeforeTax.push(balanceForYear.balance * inflationRate)
-            balanceWithoutInflationAfterTax.push(balanceForYear.balanceAfterTax)
-            balanceWithInflationAfterTax.push(balanceForYear.balanceAfterTax * inflationRate);
+        let currentState = new State(this.buyingValue, this.currentValue - this.buyingValue);
+
+
+        let balanceWithoutInflationBeforeTax: number[] = [currentState.currentValue];
+        let balanceWithInflationBeforeTax: number[] = [currentState.currentValue];
+        let balanceWithoutInflationAfterTax: number[] = [currentState.valueAfterTax];
+        let balanceWithInflationAfterTax: number[] = [currentState.valueAfterTax]
+        for (let i = 0; i < this.numberOfYears; i++) {
+            const monthlyChange = this.startOfWithdrawal > i ? this.monthlyDeposit : -this.monthlyWithdrawal;
+            const increaseAdjustedMonthlyChange = monthlyChange * Math.pow(1 + this.yearlyIncreaseOfDeposit / 100, i);
+            currentState = currentState.advanceYear(this.expectedGrowth, increaseAdjustedMonthlyChange);
+
+            let inflationRate = Math.pow(1 - this.inflation / 100, i + 1)
+            balanceWithoutInflationBeforeTax.push(currentState.currentValue);
+            balanceWithInflationBeforeTax.push(currentState.currentValue * inflationRate);
+            balanceWithoutInflationAfterTax.push(currentState.valueAfterTax)
+            balanceWithInflationAfterTax.push(currentState.valueAfterTax * inflationRate);
         }
 
         // Drop old data
@@ -114,26 +123,6 @@ export class MyChartComponent implements OnInit {
             config
         );
         this.refresh();
-    }
-
-    private getBalanceAfterNYears(years: number): { balance: number, balanceAfterTax: number } {
-        let depositGrowthPerYear: number = 1 + this.yearlyIncreaseOfDeposit / 100;
-        let stockGrowthPerYear: number = 1 + this.expectedGrowth / 100;
-        let balanceWithoutStockGrowth: number = this.buying_value + this.monthlyDeposit * this.getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(depositGrowthPerYear, years);
-        let balance = this.current_value * Math.pow(stockGrowthPerYear, years)
-            + this.monthlyDeposit * Math.pow(stockGrowthPerYear, (12 * years - 1) / 12)
-            * this.getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(depositGrowthPerYear / stockGrowthPerYear, years);
-
-        let winnings = balance - balanceWithoutStockGrowth;
-        return {balance: balance, balanceAfterTax: balance - winnings * 0.18466};
-    }
-
-    private getSummedGrowthFactorForMonthlyGrowthWithYearlyGrowthRate(growth: number, years: number): number {
-        if (growth == 1) {
-            return 12 * years;
-        }
-        let montlyGrowth = Math.pow(growth, 1 / 12);
-        return (Math.pow(montlyGrowth, 12 * years) - 1) / (montlyGrowth - 1);
     }
 
 }
